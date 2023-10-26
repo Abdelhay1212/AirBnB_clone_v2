@@ -12,11 +12,13 @@ from sqlalchemy.orm import relationship
 
 class State(BaseModel, Base):
     """represents a state for a MySQL database.
-
     """
-    __tablename__ = "states"
-    name = Column(String(128), nullable=False)
-    cities = relationship("City",  backref="state", cascade="delete")
+    if models.storage_t == "db":
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", backref="state")
+    else:
+        name = ""
 
     if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
